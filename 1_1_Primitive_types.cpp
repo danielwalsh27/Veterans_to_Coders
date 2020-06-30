@@ -1,4 +1,4 @@
-/*// include the input / output library
+// include the input / output library
 #include <iostream>
 using namespace std;
 
@@ -27,4 +27,3 @@ int main(){
 	return 0;
 }
 
-*/
