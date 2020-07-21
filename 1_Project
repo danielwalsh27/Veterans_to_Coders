@@ -1,0 +1,121 @@
+//include the input output library
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+//create prototypes
+bool convertMonth(string &month);
+bool convertDay(string &day);
+
+//int main is used to begin the program
+int main(){
+	//create array and variables
+	string dateHolder[100];
+	int dateHolderCounter = 0;
+	string userDate = "";
+	string printDates = "";
+
+	do{
+		//prompt user for date
+		bool store = true;
+		cout << "Enter a date (MM/DD/YYYY)  (-1 to exit):" << endl;
+		cin >> userDate;
+		if(userDate == "-1") break;
+
+		//parse the string into three smaller segments, MM DD YYYY
+		string month = string() + userDate[0] + userDate[1];
+		string day = string() + userDate[3] + userDate[4];
+		string year = string() + userDate[6] + userDate[7] + userDate[8] + userDate[9];
+
+		//if convert month is true or convert day is true, then do not store the broken item
+		if((convertMonth(month) || convertDay(day))  ) {
+			cout << "Did not add. Try again. Use format MM/DD/YY" << endl;
+		}
+		else{
+			dateHolder[dateHolderCounter] = month + " " + day + ", " + year;
+			cout << "ADDED: " << dateHolder[dateHolderCounter++] << endl;
+		}
+
+		userDate = ""; // clean userDate
+	}while(userDate != "-1");
+
+	//prompt user to print out the dates
+	cout << "Print Dates? (Y or N) << endl;" << endl;
+	cin >> printDates;
+
+	//if the user says yes, print out all the dates in the array
+	if(printDates == "Y" || printDates == "y"){
+		ofstream fout;
+		fout.open("yourDates.txt");
+		for (int i = 0; i < dateHolderCounter; i++){
+			fout << dateHolder[i] << endl;
+		}
+	}
+
+	//return the value of 0 to end the program
+	return 0;
+}
+
+bool convertMonth(string &month){
+	//checking if string
+	if(month == "01")
+		month = "January";
+	else if(month == "02")
+		month = "February";
+	else if(month == "03")
+		month = "March";
+	else if(month == "04")
+		month = "April";
+	else if(month == "05")
+		month = "May";
+	else if(month == "06")
+		month = "June";
+	else if(month == "07")
+		month = "July";
+	else if(month == "08")
+		month = "August";
+	else if(month == "09")
+		month = "September";
+	else if(month == "10")
+		month = "October";
+	else if(month == "11")
+		month = "November";
+	else if(month == "12")
+		month = "December";
+	else
+		return true; // failed everything, improper input
+
+	return false;// if an item was inputed correctly
+}
+
+bool convertDay(string &day){
+	/* 1st 21 31
+	 * 2nd 22
+	 * 3rd 23
+	 * 4th 5, 6, 7 8, 9, 10-20 */
+
+	if(day == "01")
+		day = string() + day[1] + "st";
+	else if(day == "21" || day == "31")
+		day = day + "st";
+	else if(day == "02")
+		day = string() + day[1] + "st";
+	else if(day == "22")
+		day = day + "nd";
+	else if(day == "03")
+		day = string() + day[1] + "st";
+	else if(day == "23")
+		day = day + "rd";
+	else{
+		//convert
+		int test = stoi(day);
+		if ((test >= 4 && test <= 9))
+			day = string() + day[1] + "th";
+		else if((test >= 10 && test <= 20) || (test >= 24 && test <= 30))
+			day = day + "th";
+		else
+			return true; // failed everything, improper input
+	}
+
+	return false;  //good input
+}
