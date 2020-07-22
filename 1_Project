@@ -1,4 +1,4 @@
-//include the input output library
+//include the input output library & fstream
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -7,57 +7,61 @@ using namespace std;
 bool convertMonth(string &month);
 bool convertDay(string &day);
 
-//int main is used to begin the program
+//int main is used to being the program
 int main(){
-	//create array and variables
+	//create array and vars
 	string dateHolder[100];
 	int dateHolderCounter = 0;
 	string userDate = "";
 	string printDates = "";
 
+	//do-while loop
 	do{
-		//prompt user for date
-		bool store = true;
-		cout << "Enter a date (MM/DD/YYYY)  (-1 to exit):" << endl;
+		//ask user to input a date
+		cout << "Enter a date (MM/DD/YYYY) (-1 to exit):" << endl;
 		cin >> userDate;
 		if(userDate == "-1") break;
 
-		//parse the string into three smaller segments, MM DD YYYY
+		//parse date into 3 stings, month day year
 		string month = string() + userDate[0] + userDate[1];
 		string day = string() + userDate[3] + userDate[4];
 		string year = string() + userDate[6] + userDate[7] + userDate[8] + userDate[9];
 
-		//if convert month is true or convert day is true, then do not store the broken item
-		if((convertMonth(month) || convertDay(day))  ) {
-			cout << "Did not add. Try again. Use format MM/DD/YY" << endl;
+		//call functions to see if they are legit
+		if((convertMonth(month)) || convertDay(day)){
+			//error found
+			cout << "Did not add. Try Again. Use format MM/DD/YYYY" << endl;
 		}
 		else{
+			//no errors add to array
 			dateHolder[dateHolderCounter] = month + " " + day + ", " + year;
-			cout << "ADDED: " << dateHolder[dateHolderCounter++] << endl;
+			cout << "Added item: " << dateHolder[dateHolderCounter] << endl;
+			dateHolderCounter++;
 		}
 
-		userDate = ""; // clean userDate
+		userDate = "";
 	}while(userDate != "-1");
 
 	//prompt user to print out the dates
-	cout << "Print Dates? (Y or N) << endl;" << endl;
+	cout << "Print Dates?  (Y or N)" << endl;
 	cin >> printDates;
 
-	//if the user says yes, print out all the dates in the array
 	if(printDates == "Y" || printDates == "y"){
 		ofstream fout;
 		fout.open("yourDates.txt");
-		for (int i = 0; i < dateHolderCounter; i++){
+		for(int i = 0; i < dateHolderCounter; i++){
 			fout << dateHolder[i] << endl;
 		}
 	}
 
 	//return the value of 0 to end the program
 	return 0;
+
 }
 
+
 bool convertMonth(string &month){
-	//checking if string
+	//check if string equals a month
 	if(month == "01")
 		month = "January";
 	else if(month == "02")
@@ -83,39 +87,46 @@ bool convertMonth(string &month){
 	else if(month == "12")
 		month = "December";
 	else
-		return true; // failed everything, improper input
+		return true; //we return true with a bad input
 
-	return false;// if an item was inputed correctly
+	return false; //we return false with a valid input
 }
 
 bool convertDay(string &day){
-	/* 1st 21 31
-	 * 2nd 22
-	 * 3rd 23
-	 * 4th 5, 6, 7 8, 9, 10-20 */
+	/*
+	st - 1
+	st - 21 31
+	nd - 2
+	nd - 22
+	rd - 3
+	rd - 23
+	th - 4-9
+	th - 10 - 20 24 - 30
+	 */
 
 	if(day == "01")
 		day = string() + day[1] + "st";
 	else if(day == "21" || day == "31")
-		day = day + "st";
+		day = string() + day[0] + day[1] + "st";
 	else if(day == "02")
-		day = string() + day[1] + "st";
+		day = string() + day[1] + "nd";
 	else if(day == "22")
-		day = day + "nd";
+		day = string() + day[0] + day[1] + "nd";
 	else if(day == "03")
-		day = string() + day[1] + "st";
+		day = string() + day[1] + "rd";
 	else if(day == "23")
-		day = day + "rd";
+		day = string() + day[0] + day[1] + "rd";
 	else{
-		//convert
-		int test = stoi(day);
-		if ((test >= 4 && test <= 9))
-			day = string() + day[1] + "th";
-		else if((test >= 10 && test <= 20) || (test >= 24 && test <= 30))
-			day = day + "th";
+		//convert from string to integer
+		int temporary = stoi(day);
+		if(temporary >= 4 && temporary <= 9)
+				day = string() + day[1] + "th";
+		else if((temporary >= 10 && temporary <= 20) || (temporary >= 24 && temporary <= 30))
+			day = string() + day[0] + day[1] + "th";
 		else
-			return true; // failed everything, improper input
+			return true; //we return true with a bad input
 	}
 
-	return false;  //good input
+	return false; //we return false with a valid input
+
 }
