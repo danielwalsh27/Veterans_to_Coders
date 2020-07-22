@@ -1,43 +1,47 @@
-//include the input output library
+//include input output library
+//include fstream library
 #include <iostream>
 #include <fstream>
 using namespace std;
 
-//int main is used to begin the program
+//int main is used to being the program
 int main(){
-	//output stream - used to write to file
+	//create output stream, write to file
 	ofstream fout;
-	fout.open("ifThisFileDoesntExistItWillCreateIt.txt");
-	fout << "This is the first line in the txt file" << endl;
-	fout << "This is the second line" << endl;
-	fout << "third line" << endl;
+	fout.open("ifThisFileDoesntExistWeWillCreateIt.txt");
 
-	//when we are done writing to the file we must close the file
+	//write to file
+	fout << "This is the first line within the file " << endl;
+	fout << "This is the second line" << endl;
+	fout << "Larry Bird is WAAAAAAY better than LeBron James, but we all already knew that" << endl;
+	fout << "The Marines are the only legitimate branch" << endl;
+
+	//close the file
 	fout.close();
 
-	//create an array to store the items we read from the file
+	//create a string array
 	string linesInFile[10];
 
-	//input stream - used to read from file
+	//create input stream, read the file
 	ifstream fin;
-	fin.open("ifThisFileDoesntExistItWillCreateIt.txt");
-	int i = 0;
+	fin.open("ifThisFileDoesntExistWeWillCreateIt.txt");
 
-	//read items from file and store into an array
+	//use while loop to read the file and store in array
+	int i = 0;
 	while(!fin.eof()){
-		getline(fin, linesInFile[i++]);
+		getline(fin, linesInFile[i]);
 		i++;
 	}
-	//when we are done writing to the file we must close the file
+
+	//close file
 	fin.close();
 
-	//print out all the contents of the array
-	for(int i = 0; i < 10; i++){
+	//print out all contents of array
+	for( i = 0; i < 10; i++){
 		cout << i << ": " << linesInFile[i] << endl;
 	}
 
-	//return the value of 0 to end the program
+	//return the value of 0 to the user
 	return 0;
 }
-
 
