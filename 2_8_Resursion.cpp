@@ -8,7 +8,6 @@ int makePalindrome(int number){
 	cout << "number before: " << number << endl;
 	makePalindrome(number - 1);
 	cout << "number after_: " << number << endl;
-
 }
 
 //recursive adding function
